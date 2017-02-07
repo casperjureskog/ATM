@@ -5,7 +5,7 @@ class Atm
     @funds = 1000
   end
 
-  def withdraw(amount, pin_code, account, account_status)
+  def withdraw(amount, pin_code, account, account_status )
     case
     when insufficient_funds_in_account?(amount, account) then
       { status: true, message: 'insufficient funds', date: Date.today }
@@ -20,9 +20,8 @@ class Atm
     else
       preform_transaction(amount, account)
 
-    end
   end
-
+end
   private
 
   def insufficient_funds_in_account?(amount, account)
@@ -34,9 +33,25 @@ class Atm
   end
 
   def preform_transaction(amount, account)
+     #@funds -= amount
+     #account.balance = account.balance -amount
+     #{ status: true, message: 'success', date: Date.today, amount: amount }
      @funds -= amount
-     account.balance = account.balance -amount
-     { status: true, message: 'success', date: Date.today, amount: amount }
+     account.balance = account.balance - amount
+     { status: true, message: 'success', date: Date.today, amount: amount, bills: add_bills(amount) }
+   end
+
+   def add_bills(amount)
+     denominations = [20, 10, 5]
+     bills = []
+     denominations.each do |bill|
+       while amount - bill >= 0
+         amount -= bill
+         bills << bill
+       end
+     end
+     bills
+
   end
 
   def incorrect_pin?(pin_code, actual_pin)

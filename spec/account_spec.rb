@@ -1,6 +1,7 @@
 require './lib/account.rb'
 
 describe Account do
+  
     let(:person) {instance_double('Person', name: 'Casper')}
 
     subject { described_class.new({owner: person}) }

@@ -1,6 +1,6 @@
 class Account
 
-  attr_accessor :pin_code, :balance, :account_status, :exp_date, :owner 
+  attr_accessor :pin_code, :balance, :account_status, :exp_date, :owner
 
   STANDARD_VALIDITY_YRS = 5
 
@@ -22,8 +22,6 @@ class Account
 
 
 private
-
-
 
 
   def generate_pin

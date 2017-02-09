@@ -3,38 +3,37 @@ class Person
 
 
   def initialize(attrs = {})
-  @name = set_name(attrs[:name])
-  @cash = 0
-  @account = nil
+  self.name = set_name(attrs[:name])
+  self.cash = 0
+  self.account = nil
   end
 
+  def set_name(name)
+   name == nil ? missing_name : name
+  end
 
   def create_account
-   @account = Account.new(owner: self)
+    self.account = Account.new(owner: self)
   end
 
   def deposit(amount)
-    @account == nil ? missing_account : deposit_funds(amount)
+    self.account == nil ? missing_account : deposit_funds(amount)
   end
 
-  def withdraw(atm, amount)
-    @account == nil ? missing_account : withdraw_funds(atm, amount)
+  def withdraw(attrs = {})
+    self.account == nil ? missing_account : withdraw_funds(attrs[:atm], attrs[:amount])
   end
 
 
   private
 
-  def deposit_funds(amount)
-     @cash -= amount
-     @account.balance += amount
-  end
-
   def increase_cash(response)
-      @cash += response[:amount]
+     self.cash += response[:amount]
   end
 
-  def set_name(name)
-   name == nil ? missing_name : name
+  def deposit_funds(amount)
+     self.cash -= amount
+     self.account.balance += amount
   end
 
   def missing_name
@@ -46,7 +45,16 @@ class Person
   end
 
   def withdraw_funds(atm, amount)
-    atm.withdraw(amount, self.account.pin_code, @account, @account.account_status)
+    atm ? perform_withdraw(amount, atm) : atm_missing
+  end
+
+  def atm_missing
+    raise RuntimeError, 'An ATM is required'
+  end
+
+  def perform_withdraw(amount, atm)
+    atm.withdraw(amount, self.account.pin_code, self.account, self.account.account_status)
+    self.cash += amount
   end
 
 end

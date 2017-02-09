@@ -17,8 +17,9 @@ class Person
     @account == nil ? missing_account : deposit_funds(amount)
   end
 
-
-
+  def withdraw(atm, amount)
+    @account == nil ? missing_account : withdraw_funds(atm, amount)
+  end
 
 
   private
@@ -44,5 +45,8 @@ class Person
      raise RuntimeError, 'No account present'
   end
 
+  def withdraw_funds(atm, amount)
+    atm.withdraw(amount, self.account.pin_code, @account, @account.account_status)
+  end
 
 end

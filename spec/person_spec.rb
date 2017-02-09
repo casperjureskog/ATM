@@ -34,10 +34,23 @@ describe Person do
    end
 
   describe 'can manage funds if an account been created' do
-     let(:atm) { Atm.new }
-  before { subject.create_account }
+    let(:atm) { Atm.new }
+    before { subject.create_account }
+
     it 'can deposit funds' do
       expect(subject.deposit(100)).to be_truthy
+    end
+
+    it 'funds are added to the accounst balance - deducted from cash' do
+     subject.cash = 100
+     subject.deposit(100)
+     expect(subject.account.balance).to be 100
+     expect(subject.cash).to be 0
+    end
+
+    it 'can withdraw funds' do
+     command = lambda { subject.withdraw(atm, 100) }
+     expect(command.call).to be_truthy
     end
   end
 

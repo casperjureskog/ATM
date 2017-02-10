@@ -1,23 +1,27 @@
+require "date"
+require './lib/account'
+
+
 class Person
   attr_accessor :name, :cash, :account
 
-
   def initialize(attrs = {})
-  self.name = set_name(attrs[:name])
-  self.cash = 0
-  self.account = nil
+    self.name = set_name(attrs [:name])
+    self.cash = 0
+    self.account = nil
   end
 
-  def set_name(name)
-   name == nil ? missing_name : name
-  end
 
   def create_account
     self.account = Account.new(owner: self)
   end
 
   def deposit(amount)
-    self.account == nil ? missing_account : deposit_funds(amount)
+    # if amount >= self.cash then
+    #   raise RuntimeError, 'not enough cash'
+    # else
+      self.account == nil ? missing_account : deposit_funds(amount)
+    # end
   end
 
   def withdraw(attrs = {})
@@ -27,13 +31,18 @@ class Person
 
   private
 
+  def set_name(name)
+    name == nil ? missing_name : name
+  end
+
   def increase_cash(response)
      self.cash += response[:amount]
   end
 
   def deposit_funds(amount)
-     self.cash -= amount
-     self.account.balance += amount
+    self.cash -= amount
+    self.account.balance += amount
+
   end
 
   def missing_name
